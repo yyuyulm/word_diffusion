@@ -1,0 +1,4 @@
+[submodule "onnxruntime"]
+	path = website/onnxruntime-build
+	url = https://github.com/microsoft/onnxruntime.git
+	branch = v1.18.0

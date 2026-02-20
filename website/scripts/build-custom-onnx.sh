@@ -92,22 +92,10 @@ fi
 
 echo "✓ Config file found: $CONFIG_FILE"
 
-# Clone ONNX Runtime if not already cloned
-if [ ! -d "$ORT_REPO_DIR" ]; then
-    echo ""
-    echo "📦 Cloning ONNX Runtime repository (shallow clone)..."
-    echo "   This will download ~500 MB instead of several GB"
-    git clone \
-        --depth 1 \
-        --single-branch \
-        --branch "v${ORT_VERSION}" \
-        --recursive \
-        --shallow-submodules \
-        https://github.com/microsoft/onnxruntime.git "$ORT_REPO_DIR"
-else
-    echo ""
-    echo "✓ ONNX Runtime repository already exists"
-fi
+# Initialize ONNX Runtime submodule
+echo ""
+echo "📦 Ensuring ONNX Runtime submodule is initialized..."
+git submodule update --init --depth 1 "$ORT_REPO_DIR"
 
 cd "$ORT_REPO_DIR"
 
