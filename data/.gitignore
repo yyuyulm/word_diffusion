@@ -1,0 +1,4 @@
+words_dictionary.json
+raw-wiktextract-data.jsonl
+wiktionary_en.parquet
+english-wordnet-2024.ttl

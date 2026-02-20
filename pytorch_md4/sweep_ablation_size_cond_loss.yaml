@@ -1,0 +1,54 @@
+# Ablation Study - Learning Rate Sweep
+# Baseline: tiny, gating_type=none, pos_emb_type=learned, cond_type=adaln_zero
+# Varying: Learning rate only
+
+program: train.py
+method: grid
+metric:
+  name: val/loss
+  goal: minimize
+command:
+  - ${env}
+  - python
+  - ${program}
+  - "--use_wandb"
+  - ${args}
+
+parameters:
+  # Fixed baseline parameters
+  wandb_project:
+    value: "word-diffusion"
+  model_size:
+    values: ["tiny-8l", "tiny", "tiny-8h"]
+  data_path:
+    value: "../data/words_dictionary.parquet"
+  batch_size:
+    value: 256
+  ema_rate:
+    value: 0.997
+  epochs:
+    value: 10
+  warmup_steps:
+    value: 800
+  timesteps:
+    value: 400
+  model_type:
+    values: ["md4", "genmd4"]
+  schedule:
+    value: "linear"
+  optimizer:
+    value: "muon"
+  gating_type:
+    value: "none"
+  pos_emb_type:
+    value: "learned"
+  cond_type:
+    values: ["adaln_zero", "adaln", "in_context", "in_context_zero", "in_context_2", "in_context_4", "in_context_zero_2", "in_context_zero_4"]
+  
+  # Learning rate ablation
+  lr:
+    value: 3e-3
+  
+  # Enable torch.compile for faster training
+  compile:
+    value: true

@@ -1,0 +1,12 @@
+{
+  "vocab_size": 28,
+  "max_seq_len": 32,
+  "timesteps": 400,
+  "model_type": "genmd4",
+  "schedule_type": "poly",
+  "sampling_grid": "cosine",
+  "t1": 0.001,
+  "power_init": 1.0,
+  "cond_type": "in_context",
+  "num_time_tokens": 4
+}

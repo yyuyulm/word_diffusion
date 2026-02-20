@@ -1,0 +1,19 @@
+{
+  "vocab_size": 28,
+  "max_seq_len": 32,
+  "timesteps": 400,
+  "cond_type": "in_context",
+  "num_time_tokens": 4,
+  "schedule_type": "poly",
+  "sampling_grid": "cosine",
+  "cont_time": true,
+  "model_type": "genmd4",
+  "t1": 0.001,
+  "dim": 64,
+  "n_layers": 12,
+  "n_heads": 4,
+  "dropout": 0.0,
+  "gating_type": "none",
+  "position_embedding_type": "learned",
+  "power_init": 1.0
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	
+		<link href="./_app/immutable/assets/2.nhsezGE5.css" rel="stylesheet">
+		<link rel="modulepreload" href="./_app/immutable/entry/start.Dn7_kDrV.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/--WsODAi.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/CJZDw758.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/CnMDFpVv.js">
+		<link rel="modulepreload" href="./_app/immutable/entry/app.Dx4OLO0B.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/CeoDvyhI.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/DrPLquxO.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/_e8V-jp4.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/a3HfCUzt.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/0.eML5TUFh.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/2.Bw862t-w.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/Cwh-X1sG.js"><!--1uha8ag--><meta name="description" content="Generate words using a diffusion transformer model running in your browser"/><!----><title>Word Diffusion Transformer</title>
+</head>
+
+<body data-sveltekit-preload-data="hover">
+	<div style="display: contents"><!--[--><!--[--><!----><!----><main class="container"><div style="padding: var(--spacing-2xl) 0;"><header style="text-align: center; margin-bottom: var(--spacing-2xl);"><h1 class="animate-fade-in">Word Diffusion</h1> <p style="margin-top: var(--spacing-md); font-size: 1.125rem; color: var(--color-text-secondary);">Generate words using a diffusion transformer model running
+				locally in your browser</p> <div style="margin-top: var(--spacing-lg); display: flex; gap: var(--spacing-sm); justify-content: center; flex-wrap: wrap;"><!--[--><span class="badge"><div class="spinner" style="width: 14px; height: 14px; border-width: 2px;"></div> Loading model...</span><!--]--></div></header> <div class="card animate-fade-in" style="animation-delay: 0.1s; margin-bottom: var(--spacing-xl);"><h2 style="margin-bottom: var(--spacing-lg);">Generation Settings</h2> <div style="display: grid; gap: var(--spacing-lg); grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));"><div><label for="num-words" style="display: block; margin-bottom: var(--spacing-sm); font-weight: 500; color: var(--color-text-secondary);">Number of Words</label> <input id="num-words" type="number" value="10" min="1" max="50" style="width: 100%; padding: var(--spacing-md); background: var(--color-bg-secondary); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); color: var(--color-text); font-size: 1rem;" class="svelte-1uha8ag"/></div> <div><label for="num-steps" style="display: block; margin-bottom: var(--spacing-sm); font-weight: 500; color: var(--color-text-secondary);">Sampling Steps</label> <input id="num-steps" type="number" value="50" min="10" max="200" step="10" style="width: 100%; padding: var(--spacing-md); background: var(--color-bg-secondary); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); color: var(--color-text); font-size: 1rem;" class="svelte-1uha8ag"/></div> <div><label for="word-pattern" style="display: block; margin-bottom: var(--spacing-sm); font-weight: 500; color: var(--color-text-secondary);">Pattern</label> <input id="word-pattern" type="text" value="" placeholder="e.g., 5 or _a___ or ca_" style="width: 100%; padding: var(--spacing-md); background: var(--color-bg-secondary); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); color: var(--color-text); font-size: 1rem;" class="svelte-1uha8ag"/> <p style="margin-top: var(--spacing-xs); font-size: 0.875rem; color: var(--color-text-muted);">Optional. Examples: "5" (5-letter words), "_a___" (2nd
+						letter is 'a'), "ca_" (starts with 'ca')</p></div></div> <div style="margin-top: var(--spacing-xl);"><button class="btn btn-primary" disabled style="width: 100%; padding: var(--spacing-lg);"><!--[!-->Generate Words<!--]--></button></div></div> <!--[!--><!--]--> <footer style="margin-top: var(--spacing-2xl); text-align: center; color: var(--color-text-muted); font-size: 0.875rem;"><p>Powered by ONNX Runtime Web • Model: MD4 Word Diffusion
+				Transformer</p></footer></div></main><!----><!----><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_ufdqc0 = {
+						base: new URL(".", location).pathname.slice(0, -1)
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("./_app/immutable/entry/start.Dn7_kDrV.js"),
+						import("./_app/immutable/entry/app.Dx4OLO0B.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+</body>
+
+</html>
