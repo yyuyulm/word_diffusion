@@ -9,7 +9,7 @@ echo "🔧 Building Custom ONNX Runtime WASM"
 echo "===================================="
 
 # Configuration
-ORT_VERSION="1.18.0"  # Match the version in package.json
+ORT_VERSION="1.24.2"  # Match the version in package.json
 ORT_REPO_DIR="./onnxruntime-build"
 CONFIG_FILE="./model/model.required_operators_and_types.config"
 OUTPUT_DIR="./dist/wasm"
@@ -99,12 +99,12 @@ git submodule update --init --depth 1 "$ORT_REPO_DIR"
 
 cd "$ORT_REPO_DIR"
 
-# Ensure submodules are initialized (full update to get latest commits)
+# Ensure submodules are initialized (shallow full update to get latest commits)
 echo ""
-echo "Updating submodules to latest commits..."
+echo "Updating submodules shallowly to latest commits..."
 echo "   This ensures we have CMake compatibility fixes"
 git submodule sync --recursive
-git submodule update --init --recursive
+git submodule update --init --recursive --depth 1
 
 # Setup emsdk (WebAssembly compiler)
 echo ""
