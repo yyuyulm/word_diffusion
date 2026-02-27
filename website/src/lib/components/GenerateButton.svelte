@@ -1,5 +1,6 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
+    import { base } from "$app/paths";
 
     let {
         isGenerating = false,
@@ -126,7 +127,7 @@
             onanimationend={handleAnimationEnd}
         >
             <img
-                src="/assets/2329481.svg"
+                src="{base}/assets/2329481.svg"
                 alt="Generate"
                 class="wheel-icon"
                 draggable="false"

@@ -1,5 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
+    import { base } from "$app/paths";
     import {
         backgroundSeeds,
         debugShowPaths,
@@ -9,14 +10,14 @@
 
     // Asset Configuration
     const ASSETS = {
-        roots: ["/assets/1767527.svg"],
+        roots: [`${base}/assets/1767527.svg`],
         branches: [
-            "/assets/309100.svg",
-            "/assets/436598.svg",
-            "/assets/1874436.svg",
-            "/assets/1437380.svg",
+            `${base}/assets/309100.svg`,
+            `${base}/assets/436598.svg`,
+            `${base}/assets/1874436.svg`,
+            `${base}/assets/1437380.svg`,
         ],
-        tips: ["/assets/47095.svg"], // Also nested circles
+        tips: [`${base}/assets/47095.svg`], // Also nested circles
     };
 
     let width = $state(0);
