@@ -161,7 +161,7 @@
         transform: scale(1); /* Explicit default */
 
         /* Intro animation: pops in after letter flips complete (~1.8s) */
-        animation: btnIntro 3s cubic-bezier(0.34, 1.46, 0.64, 1) 1.8s both;
+        animation: btnIntro 3s cubic-bezier(0.34, 1.46, 0.64, 1) 1.8s backwards;
     }
 
     /* Icon Styling */
