@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from "svelte";
+	import { base } from "$app/paths";
 	import { MD4Inference } from "$lib/model/inference";
 	import LetterBox from "$lib/components/LetterBox.svelte";
 	import WordList from "$lib/components/WordList.svelte";
@@ -68,9 +69,9 @@
 	onMount(async () => {
 		// Initialize model
 		const result = await inference.initialize(
-			"/model/model.ort",
-			"/model/tokenizer.json",
-			"/model/config.json",
+			`${base}/model/model.ort`,
+			`${base}/model/tokenizer.json`,
+			`${base}/model/config.json`,
 			"webgl", // Try WebGL first, fallbacks to WASM automatically
 		);
 
