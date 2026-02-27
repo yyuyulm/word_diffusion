@@ -174,6 +174,31 @@
 <svelte:head>
 	<title>ׅ⋆༊. ݁eunomia⊹⋆₊</title>
 	<meta name="description" content="maybe words, maybe" />
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="eunomia" />
+	<meta property="og:description" content="maybe words, maybe" />
+	<meta property="og:type" content="website" />
+	<meta
+		property="og:url"
+		content="https://yyuyulm.github.io/word_diffusion/"
+	/>
+	<meta
+		property="og:image"
+		content="https://yyuyulm.github.io/word_diffusion/assets/preview.png"
+	/>
+	<meta property="og:image:type" content="image/png" />
+	<meta property="og:image:width" content="1000" />
+	<meta property="og:image:height" content="630" />
+
+	<!-- Twitter / X Card -->
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="eunomia" />
+	<meta name="twitter:description" content="maybe words, maybe" />
+	<meta
+		name="twitter:image"
+		content="https://yyuyulm.github.io/word_diffusion/assets/preview.png"
+	/>
 </svelte:head>
 
 <!-- Debug overlay -->
