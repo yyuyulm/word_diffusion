@@ -30,13 +30,31 @@ export interface ModelConfig {
     samplingGrid: string;
 }
 
+/**
+ * All valid conditioning tokens — 26 lowercase letters, PAD, and EOW.
+ * null in a conditioning array means "free" (the mask token, vocab_size, is
+ * injected internally — it is NOT part of the tokenizer vocabulary).
+ */
+export enum ConditionToken {
+    A = 'a', B = 'b', C = 'c', D = 'd', E = 'e',
+    F = 'f', G = 'g', H = 'h', I = 'i', J = 'j',
+    K = 'k', L = 'l', M = 'm', N = 'n', O = 'o',
+    P = 'p', Q = 'q', R = 'r', S = 's', T = 't',
+    U = 'u', V = 'v', W = 'w', X = 'x', Y = 'y',
+    Z = 'z',
+    Pad = 'PAD',
+    Eow = 'EOW',
+}
+
 export interface SamplingOptions {
     numSteps?: number;
     batchSize?: number;
     onProgress?: (step: number, total: number) => void;
-    // Conditioning: fix specific positions to specific tokens
-    // Length should be maxSeqLen. Use mask token for unconditioned positions.
-    conditioning?: number[] | (string | null)[];
+    /**
+     * Full-length conditioning array built by buildConditioning().
+     * null = free position (maps to mask token internally).
+     */
+    conditioning?: (ConditionToken | null)[];
 }
 
 export class MD4Inference {
@@ -216,27 +234,22 @@ export class MD4Inference {
         let conditioningIds: number[] | null = null;
         if (options.conditioning) {
             conditioningIds = new Array(seqLen).fill(maskToken);
-
-            // Check if we have string conditioning or number conditioning
-            if (options.conditioning.length > 0 && typeof options.conditioning[0] === 'string' || options.conditioning.some(x => x === null)) {
-                // String/null conditioning
-                const strConditioning = options.conditioning as (string | null)[];
-                for (let i = 0; i < Math.min(seqLen, strConditioning.length); i++) {
-                    const char = strConditioning[i];
-                    if (char !== null) {
-                        const tokenId = this.tokenizer.getTokenId(char);
-                        if (tokenId !== undefined) {
-                            conditioningIds[i] = tokenId;
-                        } else {
-                            console.warn(`Conditioning character '${char}' not found in vocabulary`);
-                        }
+            for (let i = 0; i < Math.min(seqLen, options.conditioning.length); i++) {
+                const token = options.conditioning[i];
+                if (token === null) {
+                    conditioningIds[i] = maskToken;           // free position
+                } else if (token === ConditionToken.Pad) {
+                    conditioningIds[i] = this.tokenizer.padTokenId;
+                } else if (token === ConditionToken.Eow) {
+                    conditioningIds[i] = this.tokenizer.eowTokenId;
+                } else {
+                    // Letter: enum value IS the character string (e.g. ConditionToken.A === 'a')
+                    const tokenId = this.tokenizer.getTokenId(token);
+                    if (tokenId !== undefined) {
+                        conditioningIds[i] = tokenId;
+                    } else {
+                        console.warn(`Conditioning character '${token}' not found in vocabulary`);
                     }
-                }
-            } else {
-                // Number conditioning (legacy/direct)
-                const numConditioning = options.conditioning as number[];
-                for (let i = 0; i < Math.min(seqLen, numConditioning.length); i++) {
-                    conditioningIds[i] = numConditioning[i];
                 }
             }
         }
@@ -448,6 +461,31 @@ export class MD4Inference {
      */
     getBackend(): string {
         return this.backend;
+    }
+
+    /**
+     * Build a full conditioning array from a UI pattern.
+     * Positions 0..maxVisibleLen-1: from userPattern
+     *   null  → null (free; mask token is injected during sampling)
+     *   char  → ConditionToken letter enum value
+     * Positions maxVisibleLen..seqLen-1: ConditionToken.Pad
+     */
+    buildConditioning(userPattern: (string | null)[], maxVisibleLen: number): (ConditionToken | null)[] {
+        if (!this.config) throw new Error('Model not initialized');
+        const seqLen = this.config.maxSeqLen;
+        const conditioning: (ConditionToken | null)[] = new Array(seqLen).fill(null);
+
+        for (let i = 0; i < Math.min(maxVisibleLen, userPattern.length, seqLen); i++) {
+            const char = userPattern[i];
+            // Safe cast: UI only produces validated lowercase letters
+            conditioning[i] = char !== null ? char as unknown as ConditionToken : null;
+        }
+
+        for (let i = maxVisibleLen; i < seqLen; i++) {
+            conditioning[i] = ConditionToken.Pad;
+        }
+
+        return conditioning;
     }
 
     /**

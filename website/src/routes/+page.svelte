@@ -105,11 +105,13 @@
 		// generatedWords = [];
 
 		try {
-			// Build conditioning from the pattern if any letters are conditioned
-			const hasConditioning = conditioningPattern.some((l) => l !== null);
-			const conditioning = hasConditioning
-				? conditioningPattern
-				: undefined;
+			// Always build a full conditioning array:
+			// positions 0..MAX_WORD_LENGTH-1: user pattern (null = free)
+			// positions MAX_WORD_LENGTH..seqLen-1: PAD (keeps words ≤ 10 chars)
+			const conditioning = inference.buildConditioning(
+				conditioningPattern,
+				MAX_WORD_LENGTH,
+			);
 
 			// Close unconditioned flaps before generation starts
 			// Keep user-conditioned letters open (visible)
