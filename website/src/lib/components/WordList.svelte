@@ -59,6 +59,7 @@
     .word-line {
         font-size: 1.5rem;
         font-weight: 300;
+        font-family: var(--font-sans);
         color: var(--color-text-secondary);
         text-align: left;
         padding: var(--spacing-md) 0;

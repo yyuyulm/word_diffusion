@@ -135,7 +135,6 @@
         transition: all var(--transition-base);
         box-shadow: none;
         position: relative;
-        font-family: serif;
     }
 
     .debug-toggle::after {

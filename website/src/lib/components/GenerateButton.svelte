@@ -159,6 +159,9 @@
         /* Transition scale via transform */
         transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1); /* Bouncy/smooth ease */
         transform: scale(1); /* Explicit default */
+
+        /* Intro animation: pops in after letter flips complete (~1.8s) */
+        animation: btnIntro 3s cubic-bezier(0.34, 1.46, 0.64, 1) 1.8s both;
     }
 
     /* Icon Styling */
@@ -208,6 +211,15 @@
         }
         100% {
             transform: rotate(0deg);
+        }
+    }
+
+    @keyframes btnIntro {
+        from {
+            transform: scale(0) translateY(30px) rotate(-180deg);
+        }
+        to {
+            transform: scale(1) translateY(0px) rotate(0deg);
         }
     }
 

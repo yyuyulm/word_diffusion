@@ -53,8 +53,14 @@
         }
 
         function handleTransitionEnd(e: TransitionEvent) {
-            // Only care about transform transitions
-            if (e.propertyName !== "transform") return;
+            // Guard: only react to transitions on the node itself, not bubbled child events
+            if (e.target !== node) return;
+            // Accept both "transform" and "translate" (browser inconsistency)
+            if (
+                e.propertyName !== "transform" &&
+                e.propertyName !== "translate"
+            )
+                return;
 
             // If we were lifting, we are done now
             if (isLifting) {
@@ -197,10 +203,13 @@
         transition:
             transform 0.35s cubic-bezier(0.2, 0, 0.8, 1),
             color 0.2s; /* Snappier, less floaty */
-        font-family: inherit;
+        font-family: var(--font-sans);
         width: 1.5ch; /* Restore Desktop Width */
         position: relative;
         z-index: 1;
+        /* Firefox preserve-3d fix: keep a permanent compositor layer so
+           Firefox doesn't drop the element after the transition ends */
+        transform: translateZ(0);
     }
 
     /* ... skipping intermediate rules ... */
@@ -214,7 +223,7 @@
         border-bottom: 3px solid var(--color-text);
         color: var(--color-text);
         padding: 0;
-        font-family: inherit;
+        font-family: var(--font-sans);
         width: 1.5ch; /* Restore Desktop Width */
         text-align: center;
         outline: none;
@@ -243,6 +252,10 @@
         /* Default to closed position (covering letter) */
         transform: rotateX(0deg);
         will-change: transform;
+        /* Firefox fix: hide the flap once it rotates past 90deg so it
+           doesn't block the letter in the 3D stacking context */
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
     }
 
     /* Only animate close if we were previously open */
@@ -312,7 +325,7 @@
 
     /* Use .lifted class for sustained lift logic */
     :global(.letter-display.lifted) {
-        transform: translateY(-5px);
+        transform: translateY(-5px) translateZ(0);
     }
 
     .letter-box.editable .letter-display:hover {
