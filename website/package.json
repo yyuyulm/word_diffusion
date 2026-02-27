@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "npm run copy-models && npm run build-website",
+    "build": "npm run copy-models && npm run build-website && touch build/.nojekyll",
     "build-website": "vite build",
     "build-onnx": "./scripts/build-custom-onnx.sh",
     "build-full": "npm run build-onnx && npm run build",
