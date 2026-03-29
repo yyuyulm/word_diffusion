@@ -26,6 +26,7 @@
     } = $props();
 
     let isOpen = $state(false);
+    let activePage = $state<"about" | "debug">("about");
 
     function toggleDebug() {
         isOpen = !isOpen;
@@ -39,8 +40,21 @@
 
     {#if isOpen}
         <div class="debug-panel">
-            <h3>Debug Information</h3>
+            <div class="panel-header">
+                <button class="nav-btn" onclick={() => activePage = 'about'} style="visibility: {activePage === 'about' ? 'hidden' : 'visible'}">&laquo;</button>
+                <h3>{activePage === 'about' ? 'What-Is & How-To' : 'Debug Information'}</h3>
+                <button class="nav-btn" onclick={() => activePage = 'debug'} style="visibility: {activePage === 'debug' ? 'hidden' : 'visible'}">&raquo;</button>
+            </div>
 
+            {#if activePage === 'about'}
+                <div class="debug-section instructions">
+                <p>Welcome to <strong>eunomia</strong>, an experimental word generator model running locally in your browser.</p>
+                <ul>
+                    <li><strong>Generate:</strong> Click the red logo on the bottom right to generate a new set of words.</li>
+                    <li><strong>Fixing letters:</strong> Type letters directly into the hero word at the top to force the model to generate words with those specific letters at those positions.</li>
+                </ul>
+            </div>
+            {:else}
             <div class="debug-section">
                 <div class="debug-label">Model Status:</div>
                 <div class="debug-value">{modelStatus}</div>
@@ -108,6 +122,7 @@
                     <span>Show Assets</span>
                 </label>
             </div>
+            {/if}
         </div>
     {/if}
 </div>
@@ -172,15 +187,6 @@
         overflow-y: auto;
     }
 
-    .debug-input {
-        width: 100%;
-        padding: 4px;
-        border: 1px solid var(--color-border);
-        border-radius: 4px;
-        margin-top: 4px;
-        font-family: monospace;
-    }
-
     .debug-seeds {
         display: flex;
         gap: 4px;
@@ -194,7 +200,7 @@
         border: 1px solid var(--color-border);
         border-radius: 4px;
         font-family: monospace;
-        font-size: 0.8rem;
+        font-size: 0.95rem;
     }
 
     .debug-checkbox {
@@ -202,17 +208,45 @@
         align-items: center;
         gap: 8px;
         margin-top: 8px;
-        font-size: 0.85rem;
+        font-size: 1rem;
         cursor: pointer;
         color: var(--color-text);
         user-select: none;
     }
 
+    .panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: var(--spacing-md);
+    }
+
+    .nav-btn {
+        background: transparent;
+        border: none;
+        color: var(--color-text);
+        font-size: 2rem;
+        cursor: pointer;
+        padding: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.7;
+        line-height: 1;
+        transform: translateY(-3px);
+    }
+
+    .nav-btn:hover {
+        opacity: 1;
+    }
+
     h3 {
-        margin: 0 0 var(--spacing-md) 0;
-        font-size: 1.2rem;
+        margin: 0;
+        font-size: 1.25rem;
         font-weight: 500;
         color: var(--color-text);
+        text-align: center;
+        flex: 1;
     }
 
     h4 {
@@ -232,14 +266,33 @@
         border-bottom: none;
     }
 
+    .instructions {
+        font-size: 1.1rem;
+        color: var(--color-text);
+        line-height: 1.4;
+    }
+
+    .instructions p {
+        margin: 0 0 8px 0;
+    }
+
+    .instructions ul {
+        margin: 0;
+        padding-left: 20px;
+    }
+
+    .instructions li {
+        margin-bottom: 4px;
+    }
+
     .debug-label {
-        font-size: 0.85rem;
+        font-size: 1.05rem;
         color: var(--color-text-secondary);
         margin-bottom: 4px;
     }
 
     .debug-value {
-        font-size: 0.95rem;
+        font-size: 1.15rem;
         color: var(--color-text);
         font-family: monospace;
     }
