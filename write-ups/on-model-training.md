@@ -178,7 +178,7 @@ I think most of us at certain point might have felt a bit lost and powerless in 
 
 Back to something more grounded, I really enjoyed working with transformer architecture. I can see why it has dominated the field now, since it is essentially a really good clean slate, in my opinion. It is adaptive to any data modality, any loss/objective formulation, has various ways of conditioning. It assumes very little, while being very flexible for researcher to formulate and inject their assumptions if they consider it necessary. Also, it is really efficient for storing knowledge, since every input token shares the same parameter which decouples model size from input size. Especially when combined with Muon, since most of transformer's weights are 2D matrices, the training is quite efficient as well. It is a good medium for artists to make small models that can be easily distributed but packs a lot of functionalities.
 
-I think that is it for this blog. More on the website design and creative coding in the next one :)
+I think that is it for this blog. In the next one I will dive into the website design for this project and creative coding that powers the animation and UI :)
 
 P.S. This blog is written without the help of AI, thought the research and development of the project was heavily assisted by AI agents (coding and deep research).
 
