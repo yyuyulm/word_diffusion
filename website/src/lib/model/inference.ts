@@ -213,6 +213,36 @@ export class MD4Inference {
     }
 
     /**
+     * Get the actual number of inference steps that will be executed given the current mask ratio.
+     */
+    getActualSteps(conditioning: (ConditionToken | null)[] | null, numSteps: number): number {
+        if (!this.config || !conditioning) return numSteps;
+
+        const seqLen = this.config.maxSeqLen;
+        let maskCount = 0;
+        for (let i = 0; i < seqLen; i++) {
+            if (conditioning[i] === null) {
+                maskCount++;
+            }
+        }
+
+        const maskRatio = maskCount / seqLen;
+        let startStep = 0;
+        let minDiff = Infinity;
+        
+        for (let i = 0; i < numSteps; i++) {
+            const { t } = getSamplingGrid(i, numSteps, this.config.samplingGrid);
+            const diff = Math.abs(t - maskRatio);
+            if (diff < minDiff) {
+                minDiff = diff;
+                startStep = i;
+            }
+        }
+        
+        return numSteps - startStep;
+    }
+
+    /**
      * Generate samples using ancestral sampling.
      * Matches PyTorch/JAX implementation.
      */
@@ -254,21 +284,31 @@ export class MD4Inference {
             }
         }
 
+        let actualSteps = numSteps;
+        let startStep = 0;
+
         // Initialize with conditioning or mask tokens
-        if (conditioningIds) {
+        if (options.conditioning && conditioningIds) {
             // Duplicate conditioning array for each batch item
             for (let b = 0; b < batchSize; b++) {
                 zT.set(conditioningIds, b * seqLen);
             }
+
+            actualSteps = this.getActualSteps(options.conditioning, numSteps);
+            startStep = numSteps - actualSteps;
+            console.log(`Mask ratio calculated. Starting at step: ${startStep}/${numSteps} (Actual steps: ${actualSteps})`);
+            
         } else {
             // No conditioning, start from all mask tokens
             zT.fill(maskToken);
         }
 
-        // Iteratively denoise
-        for (let i = 0; i < numSteps; i++) {
+        // Iteratively denoise, starting from the calculated timestep matching the conditional mask ratio
+        for (let i = startStep; i < numSteps; i++) {
             if (options.onProgress) {
-                options.onProgress(i + 1, numSteps);
+                // Adjust progress reporting so it maps to the actual steps taken 
+                // e.g. step 1/25 instead of 26/50
+                options.onProgress(i - startStep + 1, actualSteps);
             }
 
             const { s, t } = getSamplingGrid(i, numSteps, this.config.samplingGrid);

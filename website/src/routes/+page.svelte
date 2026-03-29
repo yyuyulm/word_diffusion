@@ -9,7 +9,7 @@
 
 	// Fixed parameters (hidden from user)
 	const numWords = 10;
-	const numSteps = 32;
+	const numSteps = 48;
 
 	// State
 	let modelStatus: "loading" | "ready" | "error" = $state("loading");
@@ -66,6 +66,16 @@
 	// Inference engine
 	const inference = new MD4Inference();
 
+	// Dynamically calculate the remaining steps based on current mask ratio
+	let actualInferenceSteps = $derived(
+		(modelStatus as string) === "ready"
+			? inference.getActualSteps(
+					inference.buildConditioning(conditioningPattern, MAX_WORD_LENGTH),
+					numSteps,
+			  )
+			: numSteps,
+	);
+
 	onMount(async () => {
 		// Initialize model
 		const result = await inference.initialize(
@@ -100,7 +110,8 @@
 
 		isGenerating = true;
 		progress = 0;
-		totalSteps = numSteps;
+		// Use dynamically calculated steps
+		totalSteps = actualInferenceSteps;
 		// Don't clear here - let words animate out
 		// generatedWords = [];
 
@@ -208,7 +219,7 @@
 	{isGenerating}
 	{progress}
 	{totalSteps}
-	inferenceSteps={numSteps}
+	inferenceSteps={actualInferenceSteps}
 	{backend}
 />
 

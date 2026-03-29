@@ -134,7 +134,7 @@ Then it generates: `<h><o><p><e><eow><pad>` , or `<h><o><m><e><eow><pad>`
 
 Voilà! We successfully enabled functionality without complex setup by formulating the problem in a more general way.
 
-*Okay, if you are an expert in diffusion model, you might be like, "wait a minute, injecting things into the initial input like this would make the input miss match the time condition." and you are correct, but in practice I simple do a inverse lookup of the ratio of mask present on the noise schedule and use that as the starting time and decrease the steps count proportionally. It works in practice.*
+*Okay, if you are an expert in diffusion model, you might be like, "wait a minute, injecting things into the initial input like this would make the input miss match the time condition." and you are correct, but we can fix that by simply do a inverse lookup of the ratio of mask present on the noise schedule and use that as the starting time and decrease the steps count proportionally. It works in practice.*
 
 *(Also, the next part is pure nerding-out and optional for non-technical crowd, see you in part 4)*
 
