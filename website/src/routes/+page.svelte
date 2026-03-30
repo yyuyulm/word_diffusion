@@ -45,6 +45,7 @@
 	// We use the first word 'eunomia' as the base for the hero display
 	const TOOL_NAME = BASE_WORDS[0];
 	const MAX_WORD_LENGTH = 10; // Maximum word length supported by model
+	const MAX_GENERATED_WORDS = 200; // Cap on infinite scroll list
 
 	// Display state: the actual letters being shown (from generation or initial)
 	// Initialize with "nomia" padded to MAX_WORD_LENGTH
@@ -119,7 +120,7 @@
 		const observer = new IntersectionObserver(
 			(entries) => {
 				if (entries[0].isIntersecting) {
-					if (modelStatus === "ready" && !isGenerating && generatedWords.length < 100) {
+					if (modelStatus === "ready" && !isGenerating && generatedWords.length < MAX_GENERATED_WORDS) {
 						generateWords(hasGenerated);
 					}
 				}
@@ -136,7 +137,7 @@
 
 	async function generateWords(append = false) {
 		if (!inference.isInitialized() || isGenerating) return;
-		if (append && generatedWords.length >= 100) return;
+		if (append && generatedWords.length >= MAX_GENERATED_WORDS) return;
 
 		isGenerating = true;
 		isAppending = append;
@@ -181,7 +182,7 @@
 			});
 
 			if (append) {
-				generatedWords = [...generatedWords, ...words].slice(0, 100);
+				generatedWords = [...generatedWords, ...words].slice(0, MAX_GENERATED_WORDS);
 			} else {
 				// Update the display word with the first generated word
 				if (words.length > 0) {
@@ -285,7 +286,7 @@
 	<WordList words={generatedWords} {isGenerating} {numWords} {isAppending} />
 
 	<!-- Infinite Scroll Trigger -->
-	{#if generatedWords.length > 0 && generatedWords.length < 100}
+	{#if generatedWords.length > 0 && generatedWords.length < MAX_GENERATED_WORDS}
 		<div use:infiniteScroll style="height: 20px; width: 100%;"></div>
 	{/if}
 
