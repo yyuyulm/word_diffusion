@@ -31,11 +31,11 @@ One obvious (if you know how modern LLMs work) answer these day is auto-regressi
 
 So, back to the question, how to generate something that looks like English words but is not? I suppose the answer involves learning from existing English words, and maybe somehow you find a bunch of rules such as "q" is always followed by "u", "sh" and "ch" are common fragments and are mostly followed by vowels, then the computer can assemble words based on those rules. This is similar to what people tried in the 1960s-70s, using hard-coded rule-based systems that mimics human language such as the famous [ELIZA system](https://en.wikipedia.org/wiki/ELIZA). ELIZA operates on certain key words as triggers for certain phrases/sentences/expressions to continue a dialogue, such as seeing "same" means responding "In what way?". Sounds mechanical, but if such rules are well written and exhaustive, one can imagine it performing well, but the problem is how to come up with a ideal rule system, let alone one that can be translated into a computer program?
 
-Welp, maybe the computers can help us with that also? People then moved on to training models to learn the rules from large datasets based on statistic principles rather than hand coding human knowledge, i.e. modeling (making a generator/solver for something/some problem) through machine learning. In five year old's words, we ask the model to looks at texts and she be like "I see there is a lot of cases where 'I' is followed by 'am', so when I see 'I' I should guess the next word to be 'am' so I can be right more often than guessing randomly." Back then a common model is N-gram model, which essentially works by learning probability of going from one specific word to all other words as next word (to be exact, the past N (a number) words to next word, hence the name N-gram). The same principle is still used today in ChatGPT, in fact, it is just the model got much more capable (being able to look at all the past words!) and much bigger as well.
+Welp, maybe the computers can help us with that also? People then moved on to training models to learn the rules from large datasets based on statistic principles rather than hand coding human knowledge, i.e. modeling (making a generator/solver for something/some problem) through machine learning. Essentially, we ask the model to look at texts and it goes, "I see there is a lot of cases where 'I' is followed by 'am', so when I see 'I' I should guess the next word to be 'am' so I can be right more often than guessing randomly." Back then a common model is N-gram model, which essentially works by learning probability of going from one specific word to all other words as next word (to be exact, the past N (a number) words to next word, hence the name N-gram). The same principle is still used today in ChatGPT, in fact, it is just the model got much more capable (being able to look at all the past words!) and much bigger as well.
 
-![](images/paste-3.png){width="423"}
+<img src="images/paste-3.png" alt="Tweet from Sam Altman: 'i am a stochastic parrot, and so r u'" width="423">
 
-*(Sometimes I wonder if people today would fail the [Turning](https://en.wikipedia.org/wiki/Turing_test)[test](https://courses.cs.umbc.edu/471/papers/turing.pdf) if they are teleported back in time.)*
+*(Sometimes I wonder if people today would fail the [Turing](https://en.wikipedia.org/wiki/Turing_test) [test](https://courses.cs.umbc.edu/471/papers/turing.pdf) if they are teleported back in time.)*
 
 However, most of these architectures have something that I don't sit quite well with, which is the fact that assume word as something constructed from left to right, i.e. there is no effect (or causal relationship) that the later letter can have on the ones that came before. I wonder if this might have to do with my first language being Chinese, whose character (each are words, more or less) are more of a whole symbol which has no directional causal logic in how they are constructed and is more like an image, where each part are all correlated to other parts mutually. Taking that idea a step further, if we think of words like an one-dimensional image, then we can borrow the technique used in modern image generation models, i.e bi-directional attention diffusion transformer model (section 2 is all about this), but also other candidates such as VAE or GAN.
 
@@ -52,9 +52,7 @@ Again, word modeling is probably a relatively simple task, which means models th
 
 ## 2. Masked diffusion? More like Minesweeper: the unmasking process and conditioning
 
-![](images/paste-1.png){width="485"}
-
-*(screenshot of Microsoft Minesweeper on Windows XP)*
+<img src="images/paste-1.png" alt="Screenshot of Microsoft Minesweeper on Windows XP" width="485">
 
 ### 2.1 What is a masked diffusion transformer and how does it works?
 
