@@ -54,6 +54,11 @@
                     <li><strong>Fixing letters:</strong> Type letters directly into the hero word at the top to force the model to generate words with those specific letters at those positions.</li>
                     <li><strong>See more words:</strong> Scroll down the word list for more words following the same generation rules.</li>
                 </ul>
+                <p style="margin-top: var(--spacing-md);">
+                    Curious about the <a href="https://github.com/yyuyulm/word_diffusion" target="_blank" rel="noopener noreferrer" style="color: var(--color-text); text-decoration: underline; transition: color 0.15s ease;">magic</a> behind this website?<br>
+                    <a href="https://github.com/yyuyulm/word_diffusion/blob/main/write-ups/on-model-training.md" target="_blank" rel="noopener noreferrer" style="color: var(--color-text); text-decoration: underline; transition: color 0.15s ease;">Part 1: How does the model work and how can you train one yourself?</a><br>
+                    <a href="https://github.com/yyuyulm/word_diffusion/blob/main/write-ups/on-website-design.md" target="_blank" rel="noopener noreferrer" style="color: var(--color-text); text-decoration: underline; transition: color 0.15s ease;">Part 2: Website design and creative vibe coding</a>
+                </p>
             </div>
             {:else}
             <div class="debug-section">
