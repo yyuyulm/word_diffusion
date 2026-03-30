@@ -139,6 +139,13 @@
 		if (!inference.isInitialized() || isGenerating) return;
 		if (append && generatedWords.length >= MAX_GENERATED_WORDS) return;
 
+		// Hard flush any invalid inputs inside conditioning mapped out to strictly lowercase [a-z]
+		conditioningPattern = conditioningPattern.map((c) =>
+			c && typeof c === "string" && /^[a-zA-Z]$/.test(c)
+				? c.toLowerCase()
+				: null,
+		);
+
 		isGenerating = true;
 		isAppending = append;
 		progress = 0;

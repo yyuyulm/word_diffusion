@@ -102,15 +102,21 @@
 
     function handleInput(e: Event) {
         const target = e.target as HTMLInputElement;
-        const value = target.value.toLowerCase();
+        
+        // Strip non-letters and force lowercase immediately
+        let cleanValue = target.value.replace(/[^a-zA-Z]/g, '').toLowerCase();
 
-        if (value.length > 1) {
-            target.value = value.charAt(value.length - 1);
+        // Only keep the most recent character if they mashed keys
+        if (cleanValue.length > 1) {
+            cleanValue = cleanValue.charAt(cleanValue.length - 1);
         }
 
-        if (value && /^[a-z]$/.test(value)) {
-            onConditionChange(position, value);
-        } else if (value === "") {
+        // Force physical DOM to immediately reflect sanitized state
+        target.value = cleanValue;
+
+        if (cleanValue && /^[a-z]$/.test(cleanValue)) {
+            onConditionChange(position, cleanValue);
+        } else {
             onConditionChange(position, null);
         }
     }
