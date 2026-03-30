@@ -2,6 +2,3 @@
 /build
 /.svelte-kit
 /static/model
-
-/inspo
-*.DS_store

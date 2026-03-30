@@ -62,3 +62,7 @@ npm run dev
 
 # You can access the local site at http://localhost:5173
 ```
+
+## License & Copyright
+
+The codebase and methodology are open-source and provided under the project's standard license. However, please explicitly note that the reference images contained within the `website/inspo/` directory are **not** covered by the repository license; they remain the intellectual property of their original featured artists and are included strictly for private mood-board inspiration.  
