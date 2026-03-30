@@ -1,4 +1,4 @@
-# eunomia (word_diffusion)
+# ׅ⋆༊. ݁eunomia⊹⋆₊
 
 [![website preview](./website/static/assets/preview.png)](https://yyuyulm.github.io/word_diffusion/)
 
