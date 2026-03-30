@@ -180,4 +180,4 @@ I think that is it for this blog. In the next one I will dive into the website d
 
 P.S. This blog is written without the help of AI, thought the research and development of the project was heavily assisted by AI agents (coding and deep research).
 
-P.P.S I just realized the blog does not mention the word AI once in the meat of the blog. Do I get a bonus point? Joke aside, does this tiny word generating model count as artificial intelligence? Genuining asking, DM me @[yyuyulm@gmail.com].
+P.P.S I just realized the blog does not mention the word AI once in the meat of the blog. Do I get a bonus point? Joke aside, does this tiny word generating model count as artificial intelligence? Genuining asking.
