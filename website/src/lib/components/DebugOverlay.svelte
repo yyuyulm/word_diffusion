@@ -51,8 +51,8 @@
                 <p>Welcome to <strong>eunomia</strong>, an experimental word generator model running locally in your browser.</p>
                 <ul>
                     <li><strong>Generate:</strong> Click the red logo on the bottom right to generate a new set of words.</li>
-                    <li><strong>See more words:</strong> Scroll down the word list for more words.</li>
                     <li><strong>Fixing letters:</strong> Type letters directly into the hero word at the top to force the model to generate words with those specific letters at those positions.</li>
+                    <li><strong>See more words:</strong> Scroll down the word list for more words following the same generation rules.</li>
                 </ul>
             </div>
             {:else}
@@ -248,13 +248,6 @@
         color: var(--color-text);
         text-align: center;
         flex: 1;
-    }
-
-    h4 {
-        margin: var(--spacing-sm) 0;
-        font-size: 1rem;
-        font-weight: 500;
-        color: var(--color-text);
     }
 
     .debug-section {
