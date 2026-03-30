@@ -178,6 +178,6 @@ Back to something more grounded, I really enjoyed working with transformer archi
 
 I think that is it for this blog. In the next part I will dive into the website design for this project and creative coding that powers the animation and UI :)
 
-P.S. This blog is written without the help of AI, thought the research and development of the project was heavily assisted by AI agents (coding and deep research).
+P.S. This blog is written without the help of AI (hence the typos and bad grammar), thought the research and development of the project was heavily assisted by AI agents (coding and deep research).
 
 P.P.S I just realized the blog does not mention the word AI once in the meat of the blog. Do I get a bonus point? Joke aside, does this tiny word generating model count as artificial intelligence? Genuining asking.
