@@ -17,17 +17,22 @@
 	let backend = $state("unknown");
 
 	let isGenerating = $state(false);
-	// Initialize with default list
-	let generatedWords: string[] = $state([
+	// Default intro words
+	const BASE_WORDS = [
 		"eunomia",
 		"",
 		"unexisted",
 		"pieces",
 		"of",
 		"language",
-	]);
+	];
+
+	// Initialize with default list
+	let generatedWords: string[] = $state([...BASE_WORDS]);
 	let progress = $state(0);
 	let totalSteps = $state(numSteps);
+	let isAppending = $state(false);
+	let hasGenerated = $state(false);
 
 	// Animation debug control
 	let animationProgress = $state(0);
@@ -37,7 +42,8 @@
 	}
 
 	// Hero word state - dual purpose: display and conditioning
-	const TOOL_NAME = generatedWords[0];
+	// We use the first word 'eunomia' as the base for the hero display
+	const TOOL_NAME = BASE_WORDS[0];
 	const MAX_WORD_LENGTH = 10; // Maximum word length supported by model
 
 	// Display state: the actual letters being shown (from generation or initial)
@@ -103,12 +109,37 @@
 		conditioningPattern[position] = letter;
 		// Trigger reactivity
 		conditioningPattern = [...conditioningPattern];
+		
+		// Mark generation as dirty so that the next generation command completely 
+		// replaces the list rather than appending mismatches to the old conditioning output.
+		hasGenerated = false;
 	}
 
-	async function generateWords() {
+	function infiniteScroll(node: HTMLElement) {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries[0].isIntersecting) {
+					if (modelStatus === "ready" && !isGenerating && generatedWords.length < 100) {
+						generateWords(hasGenerated);
+					}
+				}
+			},
+			{ rootMargin: "200px" },
+		);
+		observer.observe(node);
+		return {
+			destroy() {
+				observer.disconnect();
+			},
+		};
+	}
+
+	async function generateWords(append = false) {
 		if (!inference.isInitialized() || isGenerating) return;
+		if (append && generatedWords.length >= 100) return;
 
 		isGenerating = true;
+		isAppending = append;
 		progress = 0;
 		// Use dynamically calculated steps
 		totalSteps = actualInferenceSteps;
@@ -124,17 +155,19 @@
 				MAX_WORD_LENGTH,
 			);
 
-			// Close unconditioned flaps before generation starts
-			// Keep user-conditioned letters open (visible)
-			// Defer to next frame to avoid flash from batched updates
-			await new Promise((resolve) => requestAnimationFrame(resolve));
-			letterBoxStates = letterBoxStates.map(
-				(_, i) => conditioningPattern[i] !== null,
-			);
+			if (!append) {
+				// Close unconditioned flaps before generation starts
+				// Keep user-conditioned letters open (visible)
+				// Defer to next frame to avoid flash from batched updates
+				await new Promise((resolve) => requestAnimationFrame(resolve));
+				letterBoxStates = letterBoxStates.map(
+					(_, i) => conditioningPattern[i] !== null,
+				);
 
-			// Wait for close animation to complete (max stagger 900ms + animation 1200ms + buffer)
-			// This ensures smooth animation without competing with inference
-			await new Promise((resolve) => setTimeout(resolve, 2200));
+				// Wait for close animation to complete (max stagger 900ms + animation 1200ms + buffer)
+				// This ensures smooth animation without competing with inference
+				await new Promise((resolve) => setTimeout(resolve, 2200));
+			}
 
 			// Now run inference after animation is complete
 			const words = await inference.sample({
@@ -147,37 +180,44 @@
 				},
 			});
 
-			// Update the display word with the first generated word
-			if (words.length > 0) {
-				const newWord = words[0];
-				displayWord = [
-					...newWord.split(""),
-					...new Array(
-						Math.max(0, MAX_WORD_LENGTH - newWord.length),
-					).fill(""),
-				].slice(0, MAX_WORD_LENGTH);
+			if (append) {
+				generatedWords = [...generatedWords, ...words].slice(0, 100);
+			} else {
+				// Update the display word with the first generated word
+				if (words.length > 0) {
+					const newWord = words[0];
+					displayWord = [
+						...newWord.split(""),
+						...new Array(
+							Math.max(0, MAX_WORD_LENGTH - newWord.length),
+						).fill(""),
+					].slice(0, MAX_WORD_LENGTH);
 
-				// Update list here, after displayWord is set
-				generatedWords = words;
+					// Update list here, after displayWord is set
+					generatedWords = words;
 
-				// Reveal all flaps to show the result
-				// Slight delay to allow DOM update if needed, but immediate is usually fine
-				setTimeout(() => {
-					letterBoxStates = new Array(MAX_WORD_LENGTH).fill(true);
-				}, 50);
+					// Reveal all flaps to show the result
+					// Slight delay to allow DOM update if needed, but immediate is usually fine
+					setTimeout(() => {
+						letterBoxStates = new Array(MAX_WORD_LENGTH).fill(true);
+					}, 50);
+				}
 			}
+
+			hasGenerated = true;
 		} catch (error) {
 			console.error("Generation failed:", error);
 			modelError = error instanceof Error ? error.message : String(error);
 			modelStatus = "error";
 		} finally {
 			isGenerating = false;
+			isAppending = false;
 			progress = 0;
 		}
 	}
 	function handleClickGenerate() {
 		if (modelStatus === "ready" && !isGenerating) {
-			generateWords();
+			generateWords(false);
 		}
 	}
 </script>
@@ -242,7 +282,12 @@
 
 	<!-- Remaining words list -->
 	<!-- Remaining words list -->
-	<WordList words={generatedWords} {isGenerating} {numWords} />
+	<WordList words={generatedWords} {isGenerating} {numWords} {isAppending} />
+
+	<!-- Infinite Scroll Trigger -->
+	{#if generatedWords.length > 0 && generatedWords.length < 100}
+		<div use:infiniteScroll style="height: 20px; width: 100%;"></div>
+	{/if}
 
 	<!-- Fixed generate button -->
 	<GenerateButton
@@ -255,6 +300,10 @@
 </main>
 
 <style>
+	:global(html) {
+		overflow-y: scroll;
+	}
+
 	/* Main container */
 	.container {
 		width: 100%;
@@ -303,12 +352,6 @@
 			padding-top: var(--spacing-3xl);
 			padding-bottom: var(--spacing-5xl);
 			min-height: 50vh;
-		}
-		/* ... */
-
-		.generate-btn {
-			bottom: var(--spacing-md);
-			right: var(--spacing-md);
 		}
 	}
 </style>

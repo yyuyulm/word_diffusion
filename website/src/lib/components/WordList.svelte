@@ -1,13 +1,15 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { onMount, untrack } from "svelte";
 
     let {
         words = [],
         isGenerating = false,
+        isAppending = false,
         numWords = 10,
     }: {
         words: string[];
         isGenerating: boolean;
+        isAppending?: boolean;
         numWords: number;
     } = $props();
 
@@ -29,15 +31,15 @@
 </script>
 
 <div class="words-list">
-    {#each Array(numWords - 1) as _, i}
-        {@const word = words.length > 1 ? words[i + 1] : "\u00A0"}
-        {#key word}
+    {#each Array(words.length > 1 ? words.length - 1 : 0) as _, i}
+        {@const word = words.length > i + 1 ? words[i + 1] : "\u00A0"}
+        {#key i + "-" + word}
             <div
                 class="word-line"
-                class:exiting={isGenerating}
-                style="animation-delay: {isGenerating
-                    ? i * 0.05
-                    : (hasLoaded ? 0 : 3.0) + i * 0.1}s"
+                class:exiting={isGenerating && !isAppending}
+                style="animation-delay: {isGenerating && !isAppending
+                    ? Math.min(i, 20) * 0.05
+                    : (untrack(() => hasLoaded) ? 0 : 3.0) + Math.min((i + 1) % numWords, 20) * 0.1}s"
             >
                 {word}
             </div>

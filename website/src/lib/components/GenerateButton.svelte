@@ -111,6 +111,7 @@
 
 <button
     class="generate-btn"
+    class:is-generating={isGenerating}
     {onclick}
     disabled={disabled || modelStatus !== "ready" || isGenerating}
     aria-label="Generate words"
